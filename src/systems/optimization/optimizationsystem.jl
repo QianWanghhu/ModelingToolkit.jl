@@ -73,6 +73,10 @@ end
 equations(sys::OptimizationSystem) = isempty(sys.systems) ? sys.op : sys.op + reduce(+,namespace_operation.(sys.systems))
 namespace_operation(sys::OptimizationSystem) = namespace_operation(sys.op,sys.name,nothing)
 
+function islinear(sys::OptimizationSystem)
+    isequal(getfield.(equations(sys),:rhs),calculate_gradient(sys)'*states(sys))
+end
+
 """
 ```julia
 function DiffEqBase.OptimizationProblem{iip}(sys::OptimizationSystem,

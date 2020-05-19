@@ -65,6 +65,10 @@ function generate_function(sys::NonlinearSystem, vs = states(sys), ps = paramete
                           conv = AbstractSysToExpr(sys), kwargs...)
 end
 
+function islinear(sys::NonlinearSystem)
+    isequal(getfield.(equations(sys),:rhs),calculate_jacobian(sys)*states(sys))
+end
+
 """
 ```julia
 function DiffEqBase.NonlinearProblem{iip}(sys::NonlinearSystem,u0map,tspan,

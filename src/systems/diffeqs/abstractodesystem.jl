@@ -119,6 +119,10 @@ function calculate_massmatrix(sys::AbstractODESystem, simplify=true)
     M == I ? I : M
 end
 
+function islinear(sys::AbstractODESystem)
+    isequal(getfield.(equations(sys),:rhs),calculate_jacobian(sys)*states(sys))
+end
+
 function DiffEqBase.ODEFunction(sys::AbstractODESystem, args...; kwargs...)
     ODEFunction{true}(sys, args...; kwargs...)
 end
